@@ -1,4 +1,4 @@
-# time_series
+# Time-series Analysis
 
 ## Overall
 Thesis
