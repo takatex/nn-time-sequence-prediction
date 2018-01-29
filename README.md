@@ -1,5 +1,5 @@
 # time_series
----
+
 ## Overall
 Thesis
 - [ ] [Recent Advances in Recurrent Neural Networks](https://arxiv.org/abs/1801.01078)
@@ -7,7 +7,7 @@ Thesis
 Article
 - [ ] [ニューラルネットワークで時系列データの予測を行う](https://qiita.com/icoxfog417/items/2791ee878deee0d0fd9c)
 - [ ] [RNN：時系列データを扱うRecurrent Neural Networksとは](https://deepage.net/deep_learning/2017/05/23/recurrent-neural-networks.html)
----
+
 ## TDNN
 Thesis
 - [ ] [Phoneme Recognition Using Time-Delay Neural Networks](http://www.cs.toronto.edu/~fritz/absps/waibelTDNN.pdf)
@@ -18,7 +18,6 @@ Thesis
 Article
 - [ ] [生命に学ぶ情報通信（ICT）の研究動向](http://www.nict.go.jp/publication/shuppan/kihou-journal/kihou-vol54no4/0201.pdf)
 
----
 ## LSTM
 Thesis
 - [ ] [LONG SHORT-TERM MEMORY](http://www.bioinf.jku.at/publications/older/2604.pdf)
@@ -29,8 +28,6 @@ Article
 - [ ] [LSTM (Long short-term memory) 概要](https://www.slideshare.net/KenjiUrai/kenji-urailstm)
 - [ ] [リカレントニューラルネットワークの概要と動作原理](https://wbawakate.jp/data/event/5/rnn.pdf)
 
-
-- ---
 ## QRNN
 Thesis
 - [ ] [Quasi-Recurrent Neural Networks](https://arxiv.org/abs/1611.01576)
