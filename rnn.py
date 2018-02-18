@@ -9,15 +9,12 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.autograd import Variable
-
 from pkg_resources import get_distribution
-import platform
-print("python", platform.python_version())
-print("")
-libs = ["numpy", "torch", "torchvision", "matplotlib"]
-for lib in libs:
-        version = get_distribution(lib).version
-        print(lib, version)
+
+EPOCH_NUM = 300
+HIDDEN_SIZE = 5
+BATCH_ROW_SIZE = 100 # 分割した時系列をいくつミニバッチに取り込むか
+BATCH_COL_SIZE = 20 # ミニバッチで分割する時系列数
 
 class LSTM(nn.Module):
         def __init__(self, seq_size, hidden_size, out_size):
@@ -41,10 +38,6 @@ class LSTM(nn.Module):
             self.hidden = (Variable(torch.zeros(1, 1, self.hidden_size)), Variable(torch.zeros(1, 1, self.hidden_size)))
 
 
-EPOCH_NUM = 300
-HIDDEN_SIZE = 5
-BATCH_ROW_SIZE = 100 # 分割した時系列をいくつミニバッチに取り込むか
-BATCH_COL_SIZE = 20 # ミニバッチで分割する時系列数
 
 # 教師デー
 train_data = np.array([np.sin(i*2*np.pi/50) for i in range(50)]*10)
