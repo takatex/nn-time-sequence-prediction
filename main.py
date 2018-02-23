@@ -1,19 +1,23 @@
+import numpy as np
 import pickle
 import datetime
-import numpy as np
+import argparse
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pylab as plt
+from utils import *
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.autograd import Variable
-import argparse
 
-from utils import *
-from models import *
+from rnn import RNN
+from lstm import LSTM
+from qrnn import QRNN
+from cnn import CNN
 
 ## params
 # args
@@ -41,10 +45,21 @@ OUTPUT_SIZE = 1
 BATCH_SIZE = 200
 N_ITER = 1
 
+
+def models():
+    if opt.model == 'rnn':
+        return RNN(INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE)
+    elif opt.model == 'lstm':
+        return LSTM(INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE)
+    elif opt.model == 'qrnn':
+        return QRNN(INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE, use_cuda=opt.gpu)
+    elif opt.model == 'cnn':
+        return CNN(INPUT_SIZE, HIDDEN_SIZE, OUTPUT_SIZE)
+
 def train(rawdata, data_num):
-    datasets = DATASETS(SEQ_LEN, BATCH_SIZE, INPUT_SIZE)
+    datasets = DATASETS(SEQ_LEN, BATCH_SIZE, INPUT_SIZE, opt.model)
     X_train, X_test, y_train, y_test, N_train, N_test = datasets.make(rawdata)
-    model = models(opt.model, INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE)
+    model = models()
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters())
    
@@ -81,8 +96,8 @@ def train(rawdata, data_num):
     # plt.vlines(N_train-SEQ_LEN, -0.5, 0.5)
 
     print(y_test.shape)
-    # x = Variable(torch.from_numpy(X_test.reshape(SEQ_LEN, N_test, INPUT_SIZE)))
-    x = Variable(torch.from_numpy(X_test.reshape(N_test, INPUT_SIZE, SEQ_LEN)))
+    x = Variable(torch.from_numpy(X_test.reshape(SEQ_LEN, N_test, INPUT_SIZE)))
+    # x = Variable(torch.from_numpy(X_test.reshape(N_test, INPUT_SIZE, SEQ_LEN)))
     y_test_pred = model(x).data.numpy().reshape(-1)
     # y_test_pred = model(x).data.numpy()
     # y_test_pred = model(x).data.numpy()[SEQ_LEN-1, :, :].reshape(-1)
@@ -95,7 +110,6 @@ def train(rawdata, data_num):
     plt.savefig(os.path.join(RESULT_PATH, figname))
     plt.close()
 
-
 def main():
     if opt.gpu != 'None':
         os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu
@@ -107,7 +121,6 @@ def main():
     for i in range(10):
         rawdata = data[:, i]
         train(rawdata, i)
-
 
 if __name__ == '__main__':
     main()
