@@ -14,10 +14,10 @@ import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.autograd import Variable
 
-from rnn import RNN
-from lstm import LSTM
-from qrnn import QRNN
-from cnn import CNN
+from models.rnn import RNN
+from models.lstm import LSTM
+from models.qrnn import QRNN
+from models.cnn import CNN
 
 ## params
 # args
