@@ -1,3 +1,5 @@
+import os, sys
+sys.path.append(os.pardir)
 import numpy as np
 import pickle
 import datetime
@@ -59,6 +61,8 @@ def models():
 def train(rawdata, data_num):
     datasets = DATASETS(SEQ_LEN, BATCH_SIZE, INPUT_SIZE, opt.model)
     X_train, X_test, y_train, y_test, N_train, N_test = datasets.make(rawdata)
+    print(X_train.shape)
+    print(X_test.shape)
     model = models()
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters())

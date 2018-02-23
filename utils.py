@@ -2,8 +2,7 @@
 import os
 import numpy as np
 from sklearn.model_selection import train_test_split
-
-
+from sklearn.metrics import mean_squared_error
 
 
 class DATASETS:
@@ -31,6 +30,7 @@ class DATASETS:
                 train_test_split(X, y, test_size=test_size, shuffle=False)
         self.N_train = len(X_train)
         N_test = len(X_test)
+
         return X_train, X_test, y_train, y_test, self.N_train, N_test
 
 
@@ -40,9 +40,17 @@ class DATASETS:
             index = np.random.randint(0, self.N_train)
             X_train_mini.append(X_train[index])
             y_train_mini.append(y_train[index])
-        X_train_mini = np.array(X_train_mini, dtype="float32").reshape(self.seq_len, self.batch_size, self.input_size)
+        X_train_mini = np.array(X_train_mini, dtype="float32")
+        X_train_mini = X_train_mini.reshape(self.seq_len, self.batch_size, self.input_size)
         # X_train_mini = np.array(X_train_mini, dtype="float32").reshape(self.batch_size,self.seq_len, self.input_size)
         # X_train_mini = np.array(X_train_mini, dtype="float32").reshape(self.batch_size, self.input_size, self.seq_len)
         y_train_mini = np.array(y_train_mini, dtype="float32")
 
         return X_train_mini, y_train_mini
+
+
+def mse(y_train, y_train_pred, y_test, y_test_pred):
+    train_error = mean_squared_error(y_train, y_train_pred)
+    test_error = mean_squared_error(y_test, y_test_pred)
+    return train_error, test_error
+

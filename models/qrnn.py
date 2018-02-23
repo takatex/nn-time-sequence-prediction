@@ -1,7 +1,9 @@
+import os, sys
+sys.path.append(os.pardir)
 import torch 
 import torch.nn as nn
 from torch.autograd import Variable
-from torchqrnn import qrnn
+from models.torchqrnn import qrnn
 
 class QRNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_size, use_cuda):
