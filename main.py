@@ -37,8 +37,8 @@ if opt.gpu != 'None':
     os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu
 # others
 # ----------
-# DATA_PATH = './data/data.pkl'
-DATA_PATH = './data/data2.pkl'
+DATA_PATH = './data/data.pkl'
+# DATA_PATH = './data/data2.pkl'
 RESULT_PATH = os.path.join('./result', opt.model)
 os.makedirs(RESULT_PATH, exist_ok=True)
 SEQ_LEN = 50
@@ -132,8 +132,8 @@ def main():
     train_error = []
     test_error = []
     for i in range(10):
-        # rawdata = data[:, i]
-        rawdata = data
+        rawdata = data[:, i]
+        # rawdata = data
         i_loss_history, i_time_history, i_train_error, i_test_error = train(rawdata, i)
         loss_history.append(i_loss_history)
         time_history.append(i_time_history)
