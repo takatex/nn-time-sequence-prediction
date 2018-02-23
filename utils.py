@@ -26,8 +26,10 @@ class DATASETS:
         else:
             X_train = np.array([rawdata[i:i+self.seq_len]
                     for i in range(self.train_len)], dtype="float32")
-            y_train = np.array([rawdata[i+1:i+self.seq_len+1]
+            y_train = np.array([rawdata[i+self.seq_len]
                     for i in range(self.train_len)], dtype="float32")
+            # y_train = np.array([rawdata[i+1:i+self.seq_len+1]
+            #         for i in range(self.train_len)], dtype="float32")
         
         X_test = np.array([rawdata[i:i+self.seq_len]
                 for i in range(self.train_len, rawdata_len)], dtype="float32")
@@ -45,6 +47,7 @@ class DATASETS:
             y_train_mini.append(y_train[index])
         X_train_mini = np.array(X_train_mini, dtype="float32")
         X_train_mini = X_train_mini.T.reshape(self.seq_len, self.batch_size, self.input_size)
+        # X_train_mini = X_train_mini.T.reshape(self.batch_size, self.seq_len)
         # X_train_mini = np.array(X_train_mini, dtype="float32").reshape(self.batch_size, self.input_size, self.seq_len)
         y_train_mini = np.array(y_train_mini, dtype="float32")
 
@@ -55,7 +58,8 @@ class DATASETS:
         if self.model_type == 'cnn':
             y_train = y_train
         else:
-            y_train = y_train[:, self.seq_len - 1]
+            # y_train = y_train[:, self.seq_len - 1]
+            y_train = y_train
 
         X_test = X_test.T.reshape(self.seq_len, self.test_len, self.input_size)
         y_test = y_test

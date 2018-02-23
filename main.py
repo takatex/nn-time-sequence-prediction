@@ -37,17 +37,17 @@ if opt.gpu != 'None':
     os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu
 # others
 # ----------
-DATA_PATH = './data/data.pkl'
-# DATA_PATH = './data/data2.pkl'
+# DATA_PATH = './data/data.pkl'
+DATA_PATH = './data/data2.pkl'
 RESULT_PATH = os.path.join('./result', opt.model)
 os.makedirs(RESULT_PATH, exist_ok=True)
-SEQ_LEN = 100
+SEQ_LEN = 50
 INPUT_SIZE = 1 # The number of expected features in the input x
-HIDDEN_SIZE = 50 # The number of features in the hidden state h
-NUM_LAYERS = 1
+HIDDEN_SIZE = 10 # The number of features in the hidden state h
+NUM_LAYERS = 2
 OUTPUT_SIZE = 1
 BATCH_SIZE = 200
-N_ITER = 10
+N_ITER = 1
 
 
 def models():
@@ -106,8 +106,11 @@ def train(rawdata, i):
         y_train_pred = y_train_pred.reshape(-1)
         y_test_pred = y_test_pred.reshape(-1)
     else:
-        y_train_pred = y_train_pred[SEQ_LEN-1, :, :].reshape(-1)
-        y_test_pred = y_test_pred[SEQ_LEN-1, :, :].reshape(-1)
+        y_train_pred = y_train_pred.reshape(-1)
+        y_test_pred = y_test_pred.reshape(-1)
+
+        # y_train_pred = y_train_pred[SEQ_LEN-1, :, :].reshape(-1)
+        # y_test_pred = y_test_pred[SEQ_LEN-1, :, :].reshape(-1)
 
     train_error, test_error = mse(y_train, y_train_pred, y_test, y_test_pred)
 
@@ -129,7 +132,8 @@ def main():
     train_error = []
     test_error = []
     for i in range(10):
-        rawdata = data[:, i]
+        # rawdata = data[:, i]
+        rawdata = data
         i_loss_history, i_time_history, i_train_error, i_test_error = train(rawdata, i)
         loss_history.append(i_loss_history)
         time_history.append(i_time_history)
