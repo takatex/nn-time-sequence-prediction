@@ -13,40 +13,54 @@ class DATASETS:
         self.model_type = model_type
 
     def make(self, rawdata):
-        test_size = 0.3
-        X, y = [], []
+        rawdata_len = len(rawdata) - self.seq_len
+        train_size = 0.7
+        self.train_len = int(rawdata_len * train_size)
+        self.test_len = rawdata_len - self.train_len
+
         if self.model_type == 'cnn':
-            for i in range(len(rawdata)-self.seq_len):
-                X.append(rawdata[i:i+self.seq_len])
-                y.append(rawdata[i+self.seq_len])
+            X_train = np.array([rawdata[i:i+self.seq_len]
+                    for i in range(self.train_len)], dtype="float32")
+            y_train = np.array([rawdata[i+self.seq_len]
+                    for i in range(self.train_len)], dtype="float32")
         else:
-            for i in range(len(rawdata)-self.seq_len):
-                X.append(rawdata[i:i+self.seq_len])
-                y.append(rawdata[i+1:i+self.seq_len+1])
+            X_train = np.array([rawdata[i:i+self.seq_len]
+                    for i in range(self.train_len)], dtype="float32")
+            y_train = np.array([rawdata[i+1:i+self.seq_len+1]
+                    for i in range(self.train_len)], dtype="float32")
+        
+        X_test = np.array([rawdata[i:i+self.seq_len]
+                for i in range(self.train_len, rawdata_len)], dtype="float32")
+        y_test = np.array([rawdata[i+self.seq_len]
+                for i in range(self.train_len, rawdata_len)], dtype="float32")
 
-        X = np.array(X, dtype="float32")
-        y = np.array(y, dtype="float32")
-        (X_train, X_test, y_train, y_test) = \
-                train_test_split(X, y, test_size=test_size, shuffle=False)
-        self.N_train = len(X_train)
-        N_test = len(X_test)
-
-        return X_train, X_test, y_train, y_test, self.N_train, N_test
+        return X_train, y_train, X_test, y_test
 
 
     def mini_traindata(self, X_train, y_train):
         X_train_mini, y_train_mini = [], []
         for i in range(self.batch_size):
-            index = np.random.randint(0, self.N_train)
+            index = np.random.randint(0, self.train_len)
             X_train_mini.append(X_train[index])
             y_train_mini.append(y_train[index])
         X_train_mini = np.array(X_train_mini, dtype="float32")
-        X_train_mini = X_train_mini.reshape(self.seq_len, self.batch_size, self.input_size)
-        # X_train_mini = np.array(X_train_mini, dtype="float32").reshape(self.batch_size,self.seq_len, self.input_size)
+        X_train_mini = X_train_mini.T.reshape(self.seq_len, self.batch_size, self.input_size)
         # X_train_mini = np.array(X_train_mini, dtype="float32").reshape(self.batch_size, self.input_size, self.seq_len)
         y_train_mini = np.array(y_train_mini, dtype="float32")
 
         return X_train_mini, y_train_mini
+
+    def make_testdata(self, X_train, y_train, X_test, y_test):
+        X_train = X_train.T.reshape(self.seq_len, self.train_len, self.input_size)
+        if self.model_type == 'cnn':
+            y_train = y_train
+        else:
+            y_train = y_train[:, self.seq_len - 1]
+
+        X_test = X_test.T.reshape(self.seq_len, self.test_len, self.input_size)
+        y_test = y_test
+
+        return X_train, y_train, X_test, y_test
 
 
 def mse(y_train, y_train_pred, y_test, y_test_pred):

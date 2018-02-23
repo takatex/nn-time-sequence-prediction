@@ -60,7 +60,7 @@ def models():
 
 def train(rawdata, data_num):
     datasets = DATASETS(SEQ_LEN, BATCH_SIZE, INPUT_SIZE, opt.model)
-    X_train, X_test, y_train, y_test, N_train, N_test = datasets.make(rawdata)
+    X_train, y_train, X_test, y_test = datasets.make(rawdata)
     print(X_train.shape)
     print(X_test.shape)
     model = models()
@@ -89,27 +89,21 @@ def train(rawdata, data_num):
     # test
     # ----------
     print('\nTest')
-    # x = Variable(torch.from_numpy(X_train.T.reshape(SEQ_LEN, N_train, 1)))
-    # y_pred_1 = model(x).data.numpy()[SEQ_LEN-1, :, :].reshape(-1)
-    # x = Variable(torch.from_numpy(X_test.T.reshape(SEQ_LEN, N_test, 1)))
-    # y_pred_2 = model(x).data.numpy()[SEQ_LEN-1, :, :].reshape(-1)
-    #
-    # y = np.r_[y_pred_1, y_pred_2]
-    # plt.plot(rawdata[SEQ_LEN:], color='blue')
-    # plt.plot(y, color='r')
-    # plt.vlines(N_train-SEQ_LEN, -0.5, 0.5)
-
-    print(y_test.shape)
-    x = Variable(torch.from_numpy(X_test.reshape(SEQ_LEN, N_test, INPUT_SIZE)))
-    # x = Variable(torch.from_numpy(X_test.reshape(N_test, INPUT_SIZE, SEQ_LEN)))
-    y_test_pred = model(x).data.numpy().reshape(-1)
-    # y_test_pred = model(x).data.numpy()
-    # y_test_pred = model(x).data.numpy()[SEQ_LEN-1, :, :].reshape(-1)
-    print(y_test_pred.shape)
-    # plt.plot(y_test[:, SEQ_LEN-1], color='blue')
+    X_train, y_train, X_test, y_test = \
+            datasets.make_testdata(X_train, y_train, X_test, y_test)
+    X_train = Variable(torch.from_numpy(X_train))
+    X_test = Variable(torch.from_numpy(X_test))
+    y_train_pred = model(X_train).data.numpy()
+    y_test_pred = model(X_test).data.numpy()
+    if opt.model == 'cnn':
+        y_train_pred = y_train_pred.reshape(-1)
+        y_test_pred = y_test_pred.reshape(-1)
+    else:
+        y_train_pred = y_train_pred[SEQ_LEN-1, :, :].reshape(-1)
+        y_test_pred = y_test_pred[SEQ_LEN-1, :, :].reshape(-1)
+    train_error, test_error = mse(y_train, y_train_pred, y_test, y_test_pred)
     plt.plot(y_test, color='blue')
     plt.plot(y_test_pred, color='red')
-
     figname = 'data' + str(data_num) + '.png'
     plt.savefig(os.path.join(RESULT_PATH, figname))
     plt.close()
