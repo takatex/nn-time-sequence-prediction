@@ -43,11 +43,11 @@ RESULT_PATH = os.path.join('./result', opt.model)
 os.makedirs(RESULT_PATH, exist_ok=True)
 SEQ_LEN = 50
 INPUT_SIZE = 1 # The number of expected features in the input x
-HIDDEN_SIZE = 50 # The number of features in the hidden state h
+HIDDEN_SIZE = 100 # The number of features in the hidden state h
 NUM_LAYERS = 2
 OUTPUT_SIZE = 1
 BATCH_SIZE = 200
-N_ITER = 1
+N_ITER = 3
 
 
 def models():
