@@ -33,6 +33,8 @@ parser.add_argument('--epoch', type=int, default=300,
 parser.add_argument('--gpu', type=str, default='None',
                     help='set CUDA_VISIBLE_DEVICES (default: None)')
 opt = parser.parse_args()
+if opt.gpu != 'None':
+    os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu
 # others
 # ----------
 DATA_PATH = './data/data.pkl'
@@ -50,9 +52,9 @@ N_ITER = 1
 
 def models():
     if opt.model == 'rnn':
-        return RNN(INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE)
+        return RNN(INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE, BATCH_SIZE)
     elif opt.model == 'lstm':
-        return LSTM(INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE)
+        return LSTM(INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE, BATCH_SIZE)
     elif opt.model == 'qrnn':
         return QRNN(INPUT_SIZE, HIDDEN_SIZE, NUM_LAYERS, OUTPUT_SIZE, use_cuda=opt.gpu)
     elif opt.model == 'cnn':
@@ -61,8 +63,6 @@ def models():
 def train(rawdata, data_num):
     datasets = DATASETS(SEQ_LEN, BATCH_SIZE, INPUT_SIZE, opt.model)
     X_train, y_train, X_test, y_test = datasets.make(rawdata)
-    print(X_train.shape)
-    print(X_test.shape)
     model = models()
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters())
@@ -109,9 +109,6 @@ def train(rawdata, data_num):
     plt.close()
 
 def main():
-    if opt.gpu != 'None':
-        os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu
-
     with open(DATA_PATH, 'rb') as f:
         data = pickle.load(f)
     # rawdata = data
