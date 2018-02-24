@@ -18,19 +18,11 @@ class DATASETS:
         self.train_len = int(rawdata_len * train_size)
         self.test_len = rawdata_len - self.train_len
 
-        if self.model_type == 'cnn':
-            X_train = np.array([rawdata[i:i+self.seq_len]
-                    for i in range(self.train_len)], dtype="float32")
-            y_train = np.array([rawdata[i+self.seq_len]
-                    for i in range(self.train_len)], dtype="float32")
-        else:
-            X_train = np.array([rawdata[i:i+self.seq_len]
-                    for i in range(self.train_len)], dtype="float32")
-            y_train = np.array([rawdata[i+self.seq_len]
-                    for i in range(self.train_len)], dtype="float32")
-            # y_train = np.array([rawdata[i+1:i+self.seq_len+1]
-            #         for i in range(self.train_len)], dtype="float32")
-        
+        X_train = np.array([rawdata[i:i+self.seq_len]
+                for i in range(self.train_len)], dtype="float32")
+        y_train = np.array([rawdata[i+self.seq_len]
+                for i in range(self.train_len)], dtype="float32")
+
         X_test = np.array([rawdata[i:i+self.seq_len]
                 for i in range(self.train_len, rawdata_len)], dtype="float32")
         y_test = np.array([rawdata[i+self.seq_len]
@@ -55,16 +47,9 @@ class DATASETS:
 
     def make_testdata(self, X_train, y_train, X_test, y_test):
         X_train = X_train.T.reshape(self.seq_len, self.train_len, self.input_size)
-        if self.model_type == 'cnn':
-            y_train = y_train
-        else:
-            # y_train = y_train[:, self.seq_len - 1]
-            y_train = y_train
-
         X_test = X_test.T.reshape(self.seq_len, self.test_len, self.input_size)
-        y_test = y_test
 
-        return X_train, y_train, X_test, y_test
+        return X_train, X_test
 
 
 def mse(y_train, y_train_pred, y_test, y_test_pred):

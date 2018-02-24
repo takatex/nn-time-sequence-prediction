@@ -96,21 +96,11 @@ def train(rawdata, i):
     # test
     # ----------
     print('\nTest')
-    X_train, y_train, X_test, y_test = \
-            datasets.make_testdata(X_train, y_train, X_test, y_test)
+    X_train, X_test = datasets.make_testdata(X_train, X_test)
     X_train = Variable(torch.from_numpy(X_train))
     X_test = Variable(torch.from_numpy(X_test))
-    y_train_pred = model(X_train).data.numpy()
-    y_test_pred = model(X_test).data.numpy()
-    if opt.model == 'cnn':
-        y_train_pred = y_train_pred.reshape(-1)
-        y_test_pred = y_test_pred.reshape(-1)
-    else:
-        y_train_pred = y_train_pred.reshape(-1)
-        y_test_pred = y_test_pred.reshape(-1)
-
-        # y_train_pred = y_train_pred[SEQ_LEN-1, :, :].reshape(-1)
-        # y_test_pred = y_test_pred[SEQ_LEN-1, :, :].reshape(-1)
+    y_train_pred = model(X_train).data.numpy().reshape(-1)
+    y_test_pred = model(X_test).data.numpy().reshape(-1)
 
     train_error, test_error = mse(y_train, y_train_pred, y_test, y_test_pred)
 
@@ -127,6 +117,7 @@ def train(rawdata, i):
 def main():
     with open(DATA_PATH, 'rb') as f:
         data = pickle.load(f)
+
     loss_history = []
     time_history = []
     train_error = []

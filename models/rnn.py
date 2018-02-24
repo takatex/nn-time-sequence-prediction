@@ -7,23 +7,14 @@ class RNN(nn.Module):
         super(RNN, self).__init__()
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        # self.batch_size = batch_size
-        # self.rnn = nn.RNN(input_size, hidden_size, self.num_layers)
         self.rnn = nn.RNN(input_size, hidden_size, num_layers)
         self.fc = nn.Linear(hidden_size, output_size)
     
-    def forward(self, x, flag):
-        # Forward propagate RNN
+    def forward(self, x):
         h = Variable(torch.zeros(self.num_layers, x.size(1), self.hidden_size))
         out, _ = self.rnn(x, h)
         
-        # print(out.shape)
-        # print(out[-1, :, :].shape)
-        # out = self.fc(out[-1, :, :])  
-        out = self.fc(out)  
-        # print(out.shape)
-        if flag:
-            print(out.shape)
+        out = self.fc(out[-1, :, :])  
         return out
     
     # def reset(self):
