@@ -45,7 +45,7 @@ class DATASETS:
 
         return X_train_mini, y_train_mini
 
-    def make_testdata(self, X_train, y_train, X_test, y_test):
+    def make_testdata(self, X_train, X_test):
         X_train = X_train.T.reshape(self.seq_len, self.train_len, self.input_size)
         X_test = X_test.T.reshape(self.seq_len, self.test_len, self.input_size)
 
