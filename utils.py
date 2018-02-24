@@ -56,3 +56,7 @@ def mse(y_train, y_train_pred, y_test, y_test_pred):
     train_error = mean_squared_error(y_train, y_train_pred)
     test_error = mean_squared_error(y_test, y_test_pred)
     return train_error, test_error
+
+def show_progress(e,b,b_total,loss):
+    sys.stdout.write("\r%3d: [%5d / %5d] loss: %f" % (e, b, b_total, loss))
+    sys.stdout.flush()

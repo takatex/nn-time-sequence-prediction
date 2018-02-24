@@ -4,10 +4,8 @@ import numpy as np
 import pickle
 import time
 import argparse
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pylab as plt
 from utils import *
+from visualizer import *
 
 import torch
 import torch.nn as nn
@@ -79,15 +77,17 @@ def train(rawdata, i):
             x, y = datasets.mini_traindata(X_train, y_train)
             x = Variable(torch.from_numpy(x))
             y = Variable(torch.from_numpy(y))
+            model.zero_grad()
             # model.reset()
             out = model(x)
             loss = criterion(out, y)
             loss.backward()
             total_loss += loss.data[0]
             optimizer.step()
+            show_progress(e, iter_, N_ITER, loss.data[0])
 
-            if (e+1) % 100 == 0:
-                print("epoch:\t{}\t loss:\t{}".format(e+1, loss.data[0]))
+            # if (e+1) % 100 == 0:
+            #     print("epoch:\t{}\t loss:\t{}".format(e+1, loss.data[0]))
 
         time_ = time.time() - start
         loss_history.append(total_loss/N_ITER)
@@ -103,12 +103,9 @@ def train(rawdata, i):
     y_test_pred = model(X_test).data.numpy().reshape(-1)
 
     train_error, test_error = mse(y_train, y_train_pred, y_test, y_test_pred)
+    figname = 'try_' + str(i) + '.png'
+    plot_test(y_test, y_test_pred, show, save, save_path=os.path.join(RESULT_PATH, figname))
 
-    plt.plot(y_test, color='blue')
-    plt.plot(y_test_pred, color='red')
-    figname = 'data' + str(i) + '.png'
-    plt.savefig(os.path.join(RESULT_PATH, figname))
-    plt.close()
 
     return loss_history, time_history, train_error, test_error
 
