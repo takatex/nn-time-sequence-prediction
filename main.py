@@ -141,6 +141,7 @@ def main():
     with open(os.path.join(opt.result_path, 'loss_history.pkl'), 'wb') as f:
         pickle.dump(loss_history, f)
     with open(os.path.join(opt.result_path, 'time_history.pkl'), 'wb') as f:
+        time_history = np.mean(time_history, axis=1).tolist()
         pickle.dump(time_history, f)
     with open(os.path.join(opt.result_path, 'train_error.pkl'), 'wb') as f:
         pickle.dump(train_error, f)
