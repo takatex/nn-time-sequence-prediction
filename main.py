@@ -122,7 +122,7 @@ def train(rawdata, i):
 
 
 def main():
-    with open('./data/data2.pkl', 'rb') as f:
+    with open('./data/data.pkl', 'rb') as f:
         data = pickle.load(f)
 
     loss_history = []
@@ -130,8 +130,8 @@ def main():
     train_error = []
     test_error = []
     for i in range(10):
-        # rawdata = data[:, i]
-        rawdata = data
+        rawdata = data[:, i]
+        # rawdata = data
         i_loss_history, i_time_history, i_train_error, i_test_error = train(rawdata, i)
         loss_history.append(i_loss_history)
         time_history.append(i_time_history)
