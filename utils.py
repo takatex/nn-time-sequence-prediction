@@ -56,4 +56,3 @@ def mse(y_train, y_train_pred, y_test, y_test_pred):
     train_error = mean_squared_error(y_train, y_train_pred)
     test_error = mean_squared_error(y_test, y_test_pred)
     return train_error, test_error
-

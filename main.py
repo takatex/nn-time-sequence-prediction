@@ -113,7 +113,6 @@ def train(rawdata, i):
     return loss_history, time_history, train_error, test_error
 
 
-
 def main():
     with open(DATA_PATH, 'rb') as f:
         data = pickle.load(f)
@@ -131,18 +130,15 @@ def main():
         train_error.append(i_train_error)
         test_error.append(i_test_error)
 
-    with open('./loss_history.pkl', 'wb') as f:
+    with open(os.path.join(RESULT_PATH, 'loss_history.pkl'), 'wb') as f:
         pickle.dump(loss_history, f)
-    with open('./time_history.pkl', 'wb') as f:
+    with open(os.path.join(RESULT_PATH, 'time_history.pkl'), 'wb') as f:
         pickle.dump(time_history, f)
-    with open('./train_error.pkl', 'wb') as f:
+    with open(os.path.join(RESULT_PATH, 'train_error.pkl'), 'wb') as f:
         pickle.dump(train_error, f)
-    with open('./test_error.pkl', 'wb') as f:
+    with open(os.path.join(RESULT_PATH, 'test_error.pkl'), 'wb') as f:
         pickle.dump(test_error, f)
 
-    # for i in range(10):
-    #     rawdata = data[:, i]
-    #     train(rawdata, i)
 
 if __name__ == '__main__':
     main()
