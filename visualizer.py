@@ -14,7 +14,7 @@ def show_save(show, save, save_path):
         plt.close()
 
 
-def plot_test(y_test, y_test_pred, show=False, save=False, save_path='')
+def plot_test(y_test, y_test_pred, show=False, save=False, save_path=''):
     plt.plot(y_test, color='blue')
     plt.plot(y_test_pred, color='red')
     show_save(show, save, save_path)

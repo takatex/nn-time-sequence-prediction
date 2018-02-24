@@ -28,11 +28,11 @@ parser.add_argument('--model', type=str, default='rnn', choices=['rnn', 'lstm', 
                     help='The type of model (default: rnn)')
 parser.add_argument('--epoch', type=int, default=300,
                     help='The number of epochs to run')
-parser.add_argument('--gpu', type=str, default='None',
+parser.add_argument('--cuda', type=str, default='None',
                     help='set CUDA_VISIBLE_DEVICES (default: None)')
 opt = parser.parse_args()
-if opt.gpu != 'None':
-    os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpu
+if opt.cuda != 'None':
+    os.environ["CUDA_VISIBLE_DEVICES"] = opt.cuda
 # others
 # ----------
 # DATA_PATH = './data/data.pkl'
@@ -64,6 +64,10 @@ def train(rawdata, i):
     model = models()
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters())
+    
+    if opt.cuda != 'None':
+        model.cuda()
+        criterion.cuda()
 
     # train
     # ----------
@@ -77,6 +81,9 @@ def train(rawdata, i):
             x, y = datasets.mini_traindata(X_train, y_train)
             x = Variable(torch.from_numpy(x))
             y = Variable(torch.from_numpy(y))
+            if opt.cuda != 'None':
+                x = x.cuda()
+                y = y.cuda()
             model.zero_grad()
             # model.reset()
             out = model(x)
@@ -99,12 +106,16 @@ def train(rawdata, i):
     X_train, X_test = datasets.make_testdata(X_train, X_test)
     X_train = Variable(torch.from_numpy(X_train))
     X_test = Variable(torch.from_numpy(X_test))
-    y_train_pred = model(X_train).data.numpy().reshape(-1)
-    y_test_pred = model(X_test).data.numpy().reshape(-1)
+    if opt.cuda != 'None':
+        X_train = X_train.cuda()
+        X_test = X_test.cuda()
+
+    y_train_pred = model(X_train).cpu().data.numpy().reshape(-1)
+    y_test_pred = model(X_test).cpu().data.numpy().reshape(-1)
 
     train_error, test_error = mse(y_train, y_train_pred, y_test, y_test_pred)
     figname = 'try_' + str(i) + '.png'
-    plot_test(y_test, y_test_pred, show, save, save_path=os.path.join(RESULT_PATH, figname))
+    plot_test(y_test, y_test_pred, show=False, save=True, save_path=os.path.join(RESULT_PATH, figname))
 
 
     return loss_history, time_history, train_error, test_error

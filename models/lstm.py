@@ -13,8 +13,10 @@ class LSTM(nn.Module):
 
     def forward(self, x):
         # Forward propagate RNN
-        h, c = (Variable(torch.zeros(self.num_layers, x.size(1), self.hidden_size)),
-             Variable(torch.zeros(self.num_layers, x.size(1), self.hidden_size)))
+        h = Variable(torch.zeros(self.num_layers, x.size(1), self.hidden_size))
+        c = Variable(torch.zeros(self.num_layers, x.size(1), self.hidden_size))
+        h = h.cuda()
+        c = c.cuda()
         out, _ = self.lstm(x, (h, c))
         out = self.fc(out[-1, :, :])
         return out
