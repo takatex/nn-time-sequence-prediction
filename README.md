@@ -1,5 +1,15 @@
 # Time-series Analysis
 
+I used this qrnn library.
+```
+@article{bradbury2016quasi,
+  title={{Quasi-Recurrent Neural Networks}},
+  author={Bradbury, James and Merity, Stephen and Xiong, Caiming and Socher, Richard},
+  journal={International Conference on Learning Representations (ICLR 2017)},
+  year={2017}
+}
+```
+
 ## Overall
 Thesis
 - [ ] [Recent Advances in Recurrent Neural Networks](https://arxiv.org/abs/1801.01078)
