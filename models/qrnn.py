@@ -11,8 +11,12 @@ class QRNN(nn.Module):
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.use_cuda = use_cuda
-        self.qrnn = qrnn.QRNN(input_size, hidden_size, num_layers, window=1, use_cuda=use_cuda)
-        self.fc = nn.Linear(hidden_size, output_size)
+        self.qrnn = qrnn.QRNN(input_size, hidden_size, num_layers, window=1, bias=False, use_cuda=use_cuda)
+        self.fc = nn.Sequential(
+                nn.Linear(hidden_size, hidden_size),
+                nn.ReLU(),
+                nn.Linear(hidden_size, output_size)
+                )
 
     def forward(self, x):
         self.qrnn.reset()

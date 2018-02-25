@@ -128,7 +128,7 @@ def main():
         ms = [opt.model]
 
     for m in ms:
-        print('\n\n********************')
+        print('\n\n**********************')
         result_path = os.path.join(opt.result_path, m)
         os.makedirs(result_path, exist_ok=True)
 
@@ -140,8 +140,8 @@ def main():
         train_error = []
         test_error = []
         for i in range(10):
-            print('\n--------------------')
-            print('model: %s - data %d/10' % (m, i))
+            print('\n----------------------')
+            print('model: %s - data %d/10' % (m, i+1))
             i_data = data[i]
             i_loss_history, i_time_history, i_train_error, i_test_error = train(i_data, m, i, result_path)
             loss_history.append(i_loss_history)

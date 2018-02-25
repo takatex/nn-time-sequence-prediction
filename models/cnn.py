@@ -19,10 +19,10 @@ class CNN(nn.Module):
         #     nn.MaxPool1d(4),
         #     )
         self.features = nn.Sequential(
-            nn.Conv1d(input_size, hidden_size, 5, 3),
+            nn.Conv1d(input_size, hidden_size, 5, 3, bias=False),
             nn.ReLU(),
             nn.MaxPool1d(3),
-            nn.Conv1d(hidden_size, hidden_size, 4, 1),
+            nn.Conv1d(hidden_size, hidden_size, 4, 1, bias=False),
             nn.ReLU(),
             nn.MaxPool1d(2),
             )

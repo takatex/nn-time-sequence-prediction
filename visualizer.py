@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+import os
 import numpy as np
+import pickle
+import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pylab as plt
@@ -54,6 +57,7 @@ def plot_test(i, y_test, y_test_pred, show=False, save=False, save_path=''):
 def plot_loss_history(model, show=False, save=False, save_path=''):
     figname = 'loss_history.png'
     save_path = os.path.join(save_path, figname)
+    loss_history = load_loss_history(model)
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     ax.plot(np.array(loss_history).T)

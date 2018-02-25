@@ -8,8 +8,12 @@ class RNN(nn.Module):
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.use_cuda = use_cuda
-        self.rnn = nn.RNN(input_size, hidden_size, num_layers)
-        self.fc = nn.Linear(hidden_size, output_size)
+        self.rnn = nn.RNN(input_size, hidden_size, num_layers, bias=False)
+        self.fc = nn.Sequential(
+                nn.Linear(hidden_size, hidden_size),
+                nn.ReLU(),
+                nn.Linear(hidden_size, output_size)
+                )
 
     def forward(self, x):
         h = Variable(torch.zeros(self.num_layers, x.size(1), self.hidden_size))
