@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pylab as plt
+import seaborn as sns
+sns.set_style('darkgrid')
+sns.set_context('poster')
 
 
 def show_save(show, save, save_path):
@@ -14,31 +18,82 @@ def show_save(show, save, save_path):
         plt.close()
 
 
-def plot_test(y_test, y_test_pred, show=False, save=False, save_path=''):
-    plt.plot(y_test, color='blue')
-    plt.plot(y_test_pred, color='red')
+def load_loss_history(model):
+    path = os.path.join('./result', model, 'loss_history.pkl')
+    with open(path, 'rb') as f:
+        loss_history = pickle.load(f)
+    return loss_history
+
+
+def load_error(model):
+    train_error_path = os.path.join('./result', model, 'train_error.pkl')
+    test_error_path = os.path.join('./result', model, 'test_error.pkl')
+    with open(train_error_path, 'rb') as f:
+        train_error = pickle.load(f)
+    with open(test_error_path, 'rb') as f:
+        test_error = pickle.load(f)
+    error = train_error + test_error
+    return error
+
+
+def load_time_history(model):
+    path = os.path.join('./result', model, 'time_history.pkl')
+    with open(path, 'rb') as f:
+        time_history = pickle.load(f)
+    return time_history
+
+
+def plot_test(i, y_test, y_test_pred, show=False, save=False, save_path=''):
+    figname = 'data%s.png'%(i)
+    save_path = os.path.join(save_path, figname)
+    plt.plot(y_test[:300], color='blue')
+    plt.plot(y_test_pred[:300], color='red')
     show_save(show, save, save_path)
 
 
-def error_boxplot(rnn_error, lstm_error, cnn_error, qrnn_error, show=False, save=False, save_path=''):
+def plot_loss_history(model, show=False, save=False, save_path=''):
+    figname = 'loss_history.png'
+    save_path = os.path.join(save_path, figname)
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.plot(np.array(loss_history).T)
+    ax.set_title(model.upper())
+    ax.set_xlabel('epoch')
+    ax.set_ylabel('MSE')
+    show_save(show, save, save_path)
+
+
+def error_boxplot(show=False, save=False, save_path=''):
+    figname = 'error.png'
+    save_path = os.path.join(save_path, figname)
+    rnn_error = load_error('rnn')
+    lstm_error = load_error('lstm')
+    cnn_error = load_error('cnn')
+    qrnn_error = load_error('qrnn')
     error = rnn_error + lstm_error + cnn_error + qrnn_error
     len_ = len(error)
     iter_ = int(len_/8)
-    model_type = ['rnn']* iter_ * 2 + ['lstm'] * iter_ * 2 + ['cnn'] * iter_*2 + ['qrnn'] * iter_*2
+    model = ['RNN']* iter_ * 2 + ['LSTM'] * iter_ * 2 + ['CNN'] * iter_*2 + ['QRNN'] * iter_*2
     error_type = (['train'] * iter_ + ['test'] * iter_) * 4
 
-    data =  pd.DataFrame({'model_type' : model_type, 'error_type' : error_type, 'error' : error})
-    ax = sns.boxplot(x="model_type", y="error", hue="error_type", data=data)
+    data =  pd.DataFrame({'model' : model, 'type' : error_type, 'MSE' : error})
+    ax = sns.boxplot(x='model', y='MSE', hue="type", data=data)
     show_save(show, save, save_path)
 
 
-def time_boxplot(rnn_time, lstm_time, cnn_time, qrnn_time, show=False, save=False, save_path=''):
+def time_boxplot(show=False, save=False, save_path=''):
+    figname = 'time.png'
+    save_path = os.path.join(save_path, figname)
+    rnn_time = load_time_history('rnn')
+    lstm_time = load_time_history('lstm')
+    cnn_time = load_time_history('cnn')
+    qrnn_time = load_time_history('qrnn')
     time_ = rnn_time + lstm_time + cnn_time + qrnn_time
     len_ = len(time_)
     print(len_)
     iter_ = int(len_/4)
-    model_type = ['rnn']* iter_ + ['lstm'] * iter_ + ['cnn'] * iter_ + ['qrnn'] * iter_
+    model = ['RNN']* iter_ + ['LSTM'] * iter_ + ['CNN'] * iter_ + ['QRNN'] * iter_
 
-    data =  pd.DataFrame({'model_type' : model_type, 'time' : time_})
-    ax = sns.boxplot(x="model_type", y='time', data=data)
+    data =  pd.DataFrame({'model' : model, 'time' : time_})
+    ax = sns.boxplot(x="model", y='time', data=data)
     show_save(show, save, save_path)

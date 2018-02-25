@@ -25,6 +25,8 @@ desc = 'time-series analysis using NN'
 parser = argparse.ArgumentParser(description=desc)
 parser.add_argument('--model', type=str, default='rnn', choices=['rnn', 'lstm', 'qrnn', 'cnn'],
                     help='The type of model (default: rnn)')
+parser.add_argument('--all', default=False,
+                    help='run all model types (default: False)')
 parser.add_argument('--epoch', type=int, default=300,
                     help='The number of epochs to run (default: 300)')
 parser.add_argument('--batch_size', type=int, default=200,
@@ -43,8 +45,6 @@ parser.add_argument('--cuda', type=str, default='None',
                     help='set CUDA_VISIBLE_DEVICES (default: None)')
 
 opt = parser.parse_args()
-opt.result_path = os.path.join(opt.result_path, opt.model)
-os.makedirs(opt.result_path, exist_ok=True)
 if opt.cuda != 'None':
     os.environ["CUDA_VISIBLE_DEVICES"] = opt.cuda
     opt.cuda = True
@@ -52,20 +52,20 @@ else:
     opt.cuda = False
 
 
-def models():
-    if opt.model == 'rnn':
+def models(m):
+    if m == 'rnn':
         return RNN(1, opt.hidden_size, opt.num_layers, 1, opt.cuda)
-    elif opt.model == 'lstm':
+    elif m == 'lstm':
         return LSTM(1, opt.hidden_size, opt.num_layers, 1, opt.cuda)
-    elif opt.model == 'qrnn':
+    elif m == 'qrnn':
         return QRNN(1, opt.hidden_size, opt.num_layers, 1, opt.cuda)
-    elif opt.model == 'cnn':
+    elif m == 'cnn':
         return CNN(1, opt.hidden_size, 1)
 
-def train(rawdata, i):
-    datasets = DATASETS(opt.seq_len, opt.batch_size, 1, opt.model)
-    X_train, y_train, X_test, y_test = datasets.make(rawdata)
-    model = models()
+def train(i_data, m, i, result_path):
+    datasets = DATASETS(opt.seq_len, opt.batch_size, 1)
+    X_train, y_train, X_test, y_test = datasets.make(i_data)
+    model = models(m)
     criterion = nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters())
 
@@ -77,7 +77,7 @@ def train(rawdata, i):
     # ----------
     loss_history = []
     time_history = []
-    print("Train")
+    # print("Train")
     for e in range(opt.epoch):
         total_loss = 0
         start = time.time()
@@ -103,7 +103,7 @@ def train(rawdata, i):
 
     # test
     # ----------
-    print('\nTest')
+    # print('\nTest')
     X_train, X_test = datasets.make_testdata(X_train, X_test)
     X_train = Variable(torch.from_numpy(X_train))
     X_test = Variable(torch.from_numpy(X_test))
@@ -115,39 +115,56 @@ def train(rawdata, i):
     y_test_pred = model(X_test).cpu().data.numpy().reshape(-1)
 
     train_error, test_error = mse(y_train, y_train_pred, y_test, y_test_pred)
-    figname = 'try_' + str(i) + '.png'
-    plot_test(y_test, y_test_pred, show=False, save=True, save_path=os.path.join(opt.result_path, figname))
+    plot_test(i, y_test, y_test_pred, show=False, save=True, save_path=result_path)
 
     return loss_history, time_history, train_error, test_error
 
 
 def main():
-    with open('./data/data.pkl', 'rb') as f:
-        data = pickle.load(f)
+    
+    if opt.all:
+        ms = ['rnn', 'lstm', 'cnn', 'qrnn']
+    else:
+        ms = [opt.model]
 
-    loss_history = []
-    time_history = []
-    train_error = []
-    test_error = []
-    for i in range(10):
-        rawdata = data[:, i]
-        # rawdata = data
-        i_loss_history, i_time_history, i_train_error, i_test_error = train(rawdata, i)
-        loss_history.append(i_loss_history)
-        time_history.append(i_time_history)
-        train_error.append(i_train_error)
-        test_error.append(i_test_error)
+    for m in ms:
+        print('\n\n********************')
+        result_path = os.path.join(opt.result_path, m)
+        os.makedirs(result_path, exist_ok=True)
 
-    with open(os.path.join(opt.result_path, 'loss_history.pkl'), 'wb') as f:
-        pickle.dump(loss_history, f)
-    with open(os.path.join(opt.result_path, 'time_history.pkl'), 'wb') as f:
-        time_history = np.mean(time_history, axis=1).tolist()
-        pickle.dump(time_history, f)
-    with open(os.path.join(opt.result_path, 'train_error.pkl'), 'wb') as f:
-        pickle.dump(train_error, f)
-    with open(os.path.join(opt.result_path, 'test_error.pkl'), 'wb') as f:
-        pickle.dump(test_error, f)
+        with open('./data/data3.pkl', 'rb') as f:
+            data = pickle.load(f)
 
+        loss_history = []
+        time_history = []
+        train_error = []
+        test_error = []
+        for i in range(10):
+            print('\n--------------------')
+            print('model: %s - data %d/10' % (m, i))
+            i_data = data[i]
+            i_loss_history, i_time_history, i_train_error, i_test_error = train(i_data, m, i, result_path)
+            loss_history.append(i_loss_history)
+            time_history.append(i_time_history)
+            train_error.append(i_train_error)
+            test_error.append(i_test_error)
 
+        with open(os.path.join(result_path, 'loss_history.pkl'), 'wb') as f:
+            pickle.dump(loss_history, f)
+        with open(os.path.join(result_path, 'time_history.pkl'), 'wb') as f:
+            time_history = np.mean(time_history, axis=1).tolist()
+            pickle.dump(time_history, f)
+        with open(os.path.join(result_path, 'train_error.pkl'), 'wb') as f:
+            pickle.dump(train_error, f)
+        with open(os.path.join(result_path, 'test_error.pkl'), 'wb') as f:
+            pickle.dump(test_error, f)
+        
+        plot_loss_history(m, save=True, save_path=result_path)
+
+    try:
+        error_boxplot(save=True, save_path=opt.result_path)
+        time_boxplot(save=True, save_path=opt.result_path)
+    except:
+        pass
 if __name__ == '__main__':
     main()

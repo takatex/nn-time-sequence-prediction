@@ -6,26 +6,25 @@ from sklearn.metrics import mean_squared_error
 
 
 class DATASETS:
-    def __init__(self, seq_len, batch_size, input_size, model_type):
+    def __init__(self, seq_len, batch_size, input_size):
         self.seq_len = seq_len
         self.batch_size = batch_size
         self.input_size = input_size
-        self.model_type = model_type
 
     def make(self, rawdata):
-        rawdata_len = len(rawdata) - self.seq_len
+        rawdata_len = len(rawdata) - self.seq_len - 9
         train_size = 0.7
         self.train_len = int(rawdata_len * train_size)
         self.test_len = rawdata_len - self.train_len
 
         X_train = np.array([rawdata[i:i+self.seq_len]
                 for i in range(self.train_len)], dtype="float32")
-        y_train = np.array([rawdata[i+self.seq_len]
+        y_train = np.array([rawdata[i+self.seq_len+9]
                 for i in range(self.train_len)], dtype="float32")
 
         X_test = np.array([rawdata[i:i+self.seq_len]
                 for i in range(self.train_len, rawdata_len)], dtype="float32")
-        y_test = np.array([rawdata[i+self.seq_len]
+        y_test = np.array([rawdata[i+self.seq_len+9]
                 for i in range(self.train_len, rawdata_len)], dtype="float32")
 
         return X_train, y_train, X_test, y_test

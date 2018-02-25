@@ -1,9 +1,12 @@
 import math
 import torch
 from torch.autograd import Variable
-# from cupy.cuda import function
 from pynvrtc.compiler import Program
 from collections import namedtuple
+try:
+  from cupy.cuda import function
+except:
+  pass
 
 ###
 

@@ -11,13 +11,13 @@ class QRNN(nn.Module):
         self.hidden_size = hidden_size
         self.num_layers = num_layers
         self.use_cuda = use_cuda
-        self.qrnn = qrnn.QRNN(input_size, hidden_size, num_layers, use_cuda)
-        self.qrnn.use_cuda = use_cuda
+        self.qrnn = qrnn.QRNN(input_size, hidden_size, num_layers, window=1, use_cuda=use_cuda)
         self.fc = nn.Linear(hidden_size, output_size)
 
-    def forward(self, x, flag=False):
+    def forward(self, x):
+        self.qrnn.reset()
         h = Variable(torch.zeros(self.num_layers, x.size(1), self.hidden_size))
-        if use_cuda:
+        if self.use_cuda:
             h = h.cuda()
 
         out, _ = self.qrnn(x, h)
