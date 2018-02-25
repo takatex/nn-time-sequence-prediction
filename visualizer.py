@@ -52,8 +52,9 @@ def load_time_history(model):
 def plot_test(i, y_test, y_test_pred, show=False, save=False, save_path=''):
     figname = 'data%s.png'%(i)
     save_path = os.path.join(save_path, figname)
-    plt.plot(y_test[:300], color='blue')
-    plt.plot(y_test_pred[:300], color='red')
+    plt.plot(y_test[:300], color='blue', label='true')
+    plt.plot(y_test_pred[:300], color='red', label='predict')
+    plt.legend()
     show_save(show, save, save_path)
 
 
