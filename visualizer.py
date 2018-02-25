@@ -3,6 +3,9 @@ import os
 import numpy as np
 import pickle
 import pandas as pd
+import pandas as pd
+
+
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pylab as plt
@@ -13,7 +16,7 @@ sns.set_context('poster')
 
 def show_save(show, save, save_path):
     if save:
-        plt.savefig(save_path)
+        plt.savefig(save_path, bbox_inches='tight')
 
     if show:
         plt.show()
@@ -94,10 +97,9 @@ def time_boxplot(show=False, save=False, save_path=''):
     qrnn_time = load_time_history('qrnn')
     time_ = rnn_time + lstm_time + cnn_time + qrnn_time
     len_ = len(time_)
-    print(len_)
     iter_ = int(len_/4)
     model = ['RNN']* iter_ + ['LSTM'] * iter_ + ['CNN'] * iter_ + ['QRNN'] * iter_
 
-    data =  pd.DataFrame({'model' : model, 'time' : time_})
-    ax = sns.boxplot(x="model", y='time', data=data)
+    data =  pd.DataFrame({'model' : model, 'time [sec/epoch]' : time_})
+    ax = sns.boxplot(x="model", y='time [sec/epoch]', data=data)
     show_save(show, save, save_path)
