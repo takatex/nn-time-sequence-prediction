@@ -7,7 +7,7 @@ import pandas as pd
 
 
 import matplotlib
-matplotlib.use('Agg')
+# matplotlib.use('Agg')
 import matplotlib.pylab as plt
 import seaborn as sns
 sns.set_style('darkgrid')
@@ -54,7 +54,7 @@ def plot_test(i, y_test, y_test_pred, show=False, save=False, save_path=''):
     save_path = os.path.join(save_path, figname)
     plt.plot(y_test[:300], color='blue', label='true')
     plt.plot(y_test_pred[:300], color='red', label='predict')
-    plt.legend()
+    plt.legend(bbox_to_anchor=(1.4, 1), loc=1, borderaxespad=0, fontsize=18)
     show_save(show, save, save_path)
 
 
@@ -68,6 +68,7 @@ def plot_loss_history(model, show=False, save=False, save_path=''):
     ax.set_title(model.upper())
     ax.set_xlabel('epoch')
     ax.set_ylabel('MSE')
+    ax.set_ylim(0,)
     show_save(show, save, save_path)
 
 
@@ -86,6 +87,8 @@ def error_boxplot(show=False, save=False, save_path=''):
 
     data =  pd.DataFrame({'model' : model, 'type' : error_type, 'MSE' : error})
     ax = sns.boxplot(x='model', y='MSE', hue="type", data=data)
+    ax.set_ylim(0,)
+    ax.legend(loc=2)
     show_save(show, save, save_path)
 
 
@@ -103,4 +106,5 @@ def time_boxplot(show=False, save=False, save_path=''):
 
     data =  pd.DataFrame({'model' : model, 'time [sec/epoch]' : time_})
     ax = sns.boxplot(x="model", y='time [sec/epoch]', data=data)
+    ax.set_ylim(0,)
     show_save(show, save, save_path)
