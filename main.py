@@ -26,8 +26,8 @@ desc = 'time-series analysis using NN'
 parser = argparse.ArgumentParser(description=desc)
 parser.add_argument('--model', type=str, default='rnn', choices=['rnn', 'lstm', 'qrnn', 'cnn'],
                     help='The type of model (default: rnn)')
-parser.add_argument('--all', default=True,
-                    help='run all model types (default: True)')
+parser.add_argument('--all', default=False,
+                    help='run all model types (default: False)')
 parser.add_argument('--epoch', type=int, default=300,
                     help='The number of epochs to run (default: 300)')
 parser.add_argument('--batch_size', type=int, default=200,
@@ -49,8 +49,10 @@ opt = parser.parse_args()
 if opt.cuda != 'None':
     os.environ["CUDA_VISIBLE_DEVICES"] = opt.cuda
     opt.cuda = True
+    print('Using GPU')
 else:
     opt.cuda = False
+    print('Using CPU')
 
 
 def models(m):
@@ -125,8 +127,10 @@ def main():
     else:
         ms = [opt.model]
 
+    print('Fowllowing models will be used.', ms)
     for m in ms:
-        print('\n\n**********************')
+        print('\n\n**********************\n%s'%(m.upper()))
+        print('**********************')
         result_path = os.path.join(opt.result_path, m)
         os.makedirs(result_path, exist_ok=True)
 
@@ -138,8 +142,7 @@ def main():
         train_error = []
         test_error = []
         for i in range(10):
-            print('\n----------------------')
-            print('model: %s - data %d/10' % (m, i+1))
+            print('\nmodel: %s - data %d/10' % (m, i+1))
             i_data = data[i]
             i_loss_history, i_time_history, i_train_error, i_test_error = train(i_data, m, i, result_path)
             loss_history.append(i_loss_history)
@@ -163,7 +166,9 @@ def main():
         error_boxplot(save=True, save_path=opt.result_path)
         time_boxplot(save=True, save_path=opt.result_path)
     except:
-        pass
+        message = '\n\nCannot draw a error boxplot and time boxplot.\nPossibly, there are not enough result file (*.pkl).'
+        message += '\nIf you want to draw them, please run the following commands.\n\npython main.py --all True [other option]\n'
+        print(message)
 
 if __name__ == '__main__':
     main()
