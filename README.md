@@ -26,7 +26,7 @@ I used a [qrnn library of Salesforce](https://github.com/salesforce/pytorch-qrnn
 
 ## Usege
 ```
-python main.py [-h] [--model {rnn,lstm,qrnn,cnn}] [--all ALL] [--epoch EPOCH]
+python main.py [-h] [--model {all,rnn,lstm,qrnn,cnn}] [--epoch EPOCH]
                [--batch_size BATCH_SIZE] [--n_iter N_ITER] [--seq_len SEQ_LEN]
                [--hidden_size HIDDEN_SIZE] [--num_layers NUM_LAYERS]
                [--result_path RESULT_PATH] [--cuda CUDA]
@@ -34,7 +34,6 @@ python main.py [-h] [--model {rnn,lstm,qrnn,cnn}] [--all ALL] [--epoch EPOCH]
 optional arguments:
   -h, --help                    show this help message and exit
   --model {rnn,lstm,qrnn,cnn}   The type of model (default: rnn)
-  --all ALL                     run all model types (default: False)
   --epoch EPOCH                 The number of epochs to run (default: 300)
   --batch_size BATCH_SIZE       The number of batch (default: 200)
   --n_iter N_ITER               The number of iteration (default: 5)
@@ -46,10 +45,10 @@ optional arguments:
 ```
 
 **example**   
-If you set `--all True`, all models(rnn, lstm, cnn, qrnn) are used.
+If you set `--model all`, all models(rnn, lstm, cnn, qrnn) are used.
 If you cannot use GPU, set `--cuda None`(default).
 ```
-python main.py --cuda 0 --all True
+python main.py --cuda 0 --model all
 ```
 
 You can also run one model.
