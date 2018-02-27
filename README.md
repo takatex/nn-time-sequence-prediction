@@ -32,16 +32,16 @@ python main.py [-h] [--model {all,rnn,lstm,qrnn,cnn}] [--epoch EPOCH]
                [--result_path RESULT_PATH] [--cuda CUDA]
 
 optional arguments:
-  -h, --help                    show this help message and exit
+  -h, --help                        show this help message and exit
   --model {all,rnn,lstm,qrnn,cnn}   The type of model (default: rnn)
-  --epoch EPOCH                 The number of epochs to run (default: 300)
-  --batch_size BATCH_SIZE       The number of batch (default: 200)
-  --n_iter N_ITER               The number of iteration (default: 5)
-  --seq_len SEQ_LEN             The length of sequence (default: 50)
-  --hidden_size HIDDEN_SIZE     The number of features in the hidden state h (default: 20)
-  --num_layers NUM_LAYERS       The number of layers (default: 2)
-  --result_path RESULT_PATH     Result path (default: ./result)
-  --cuda CUDA                   set CUDA_VISIBLE_DEVICES (default: None)
+  --epoch EPOCH                     The number of epochs to run (default: 300)
+  --batch_size BATCH_SIZE           The number of batch (default: 200)
+  --n_iter N_ITER                   The number of iteration (default: 5)
+  --seq_len SEQ_LEN                 The length of sequence (default: 50)
+  --hidden_size HIDDEN_SIZE         The number of features in the hidden state h (default: 20)
+  --num_layers NUM_LAYERS           The number of layers (default: 2)
+  --result_path RESULT_PATH         Result path (default: ./result)
+  --cuda CUDA                       set CUDA_VISIBLE_DEVICES (default: None)
 ```
 
 **example**   
