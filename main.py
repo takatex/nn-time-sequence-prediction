@@ -24,10 +24,8 @@ from models.cnn import CNN
 # ----------
 desc = 'time-series analysis using NN'
 parser = argparse.ArgumentParser(description=desc)
-parser.add_argument('--model', type=str, default='rnn', choices=['rnn', 'lstm', 'qrnn', 'cnn'],
+parser.add_argument('--model', type=str, default='all', choices=['all', 'rnn', 'lstm', 'qrnn', 'cnn'],
                     help='The type of model (default: rnn)')
-parser.add_argument('--all', default=False,
-                    help='run all model types (default: False)')
 parser.add_argument('--epoch', type=int, default=300,
                     help='The number of epochs to run (default: 300)')
 parser.add_argument('--batch_size', type=int, default=200,
@@ -122,7 +120,7 @@ def train(i_data, m, i, result_path):
 
 
 def main():
-    if opt.all:
+    if opt.model == 'all':
         ms = ['rnn', 'lstm', 'cnn', 'qrnn']
     else:
         ms = [opt.model]
