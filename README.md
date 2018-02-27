@@ -46,7 +46,7 @@ optional arguments:
 ```
 
 **example**   
-If you set `--all True`, all models(rnn, lstm, cnn, qrnn) are used.  
+If you set `--all True`, all models(rnn, lstm, cnn, qrnn) are used.
 If you cannot use GPU, set `--cuda None`(default).
 ```
 python main.py --cuda 0 --all True
