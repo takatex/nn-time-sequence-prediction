@@ -130,7 +130,7 @@ def main():
         result_path = os.path.join(opt.result_path, m)
         os.makedirs(result_path, exist_ok=True)
 
-        with open('./data/data2.pkl', 'rb') as f:
+        with open('./data/data.pkl', 'rb') as f:
             data = pickle.load(f)
 
         loss_history = []
