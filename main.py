@@ -25,7 +25,7 @@ from models.cnn import CNN
 desc = 'time-series analysis using NN'
 parser = argparse.ArgumentParser(description=desc)
 parser.add_argument('--model', type=str, default='all', choices=['all', 'rnn', 'lstm', 'qrnn', 'cnn'],
-                    help='The type of model (default: rnn)')
+                    help='The type of model (default: all)')
 parser.add_argument('--epoch', type=int, default=300,
                     help='The number of epochs to run (default: 300)')
 parser.add_argument('--batch_size', type=int, default=200,
