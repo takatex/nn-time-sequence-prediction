@@ -13,32 +13,25 @@ I used a [qrnn library of Salesforce](https://github.com/salesforce/pytorch-qrnn
 ```
 
 ## Usege
+```
 main.py [-h] [--model {rnn,lstm,qrnn,cnn}] [--all ALL] [--epoch EPOCH]
                [--batch_size BATCH_SIZE] [--n_iter N_ITER] [--seq_len SEQ_LEN]
                [--hidden_size HIDDEN_SIZE] [--num_layers NUM_LAYERS]
                [--result_path RESULT_PATH] [--cuda CUDA]
 
-time-series analysis using NN
-
 optional arguments:
-  -h, --help            show this help message and exit
-  --model {rnn,lstm,qrnn,cnn}
-                        The type of model (default: rnn)
-  --all ALL             run all model types (default: False)
-  --epoch EPOCH         The number of epochs to run (default: 300)
-  --batch_size BATCH_SIZE
-                        The number of batch (default: 200)
-  --n_iter N_ITER       The number of iteration (default: 5)
-  --seq_len SEQ_LEN     The length of sequence (default: 50)
-  --hidden_size HIDDEN_SIZE
-                        The number of features in the hidden state h (default:
-                        20)
-  --num_layers NUM_LAYERS
-                        The number of layers (default: 2)
-  --result_path RESULT_PATH
-                        Result path (default: ./result)
-  --cuda CUDA           set CUDA_VISIBLE_DEVICES (default: None)
-
+  -h, --help                    show this help message and exit
+  --model {rnn,lstm,qrnn,cnn}   The type of model (default: rnn)
+  --all ALL                     run all model types (default: False)
+  --epoch EPOCH                 The number of epochs to run (default: 300)
+  --batch_size BATCH_SIZE       The number of batch (default: 200)
+  --n_iter N_ITER               The number of iteration (default: 5)
+  --seq_len SEQ_LEN             The length of sequence (default: 50)
+  --hidden_size HIDDEN_SIZE     The number of features in the hidden state h (default: 20)
+  --num_layers NUM_LAYERS       The number of layers (default: 2)
+  --result_path RESULT_PATH     Result path (default: ./result)
+  --cuda CUDA                   set CUDA_VISIBLE_DEVICES (default: None)
+```
 
 ## Thesis
 ### Overall
