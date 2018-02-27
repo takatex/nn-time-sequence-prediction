@@ -5,9 +5,8 @@ import pickle
 import pandas as pd
 import pandas as pd
 
-
 import matplotlib
-# matplotlib.use('Agg')
+matplotlib.use('Agg')
 import matplotlib.pylab as plt
 import seaborn as sns
 sns.set_style('darkgrid')
