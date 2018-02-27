@@ -1,4 +1,4 @@
-import torch 
+import torch
 import torch.nn as nn
 from torch.autograd import Variable
 
@@ -22,6 +22,3 @@ class RNN(nn.Module):
         out, _ = self.rnn(x, h)
         out = self.fc(out[-1, :, :])
         return out
-
-    # def reset(self):
-    #     self.h = Variable(torch.zeros(self.num_layers, self.batch_size, self.hidden_size))

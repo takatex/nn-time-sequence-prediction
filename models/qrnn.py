@@ -1,6 +1,6 @@
 import os, sys
 sys.path.append(os.pardir)
-import torch 
+import torch
 import torch.nn as nn
 from torch.autograd import Variable
 from models.torchqrnn import qrnn
@@ -27,6 +27,3 @@ class QRNN(nn.Module):
         out, _ = self.qrnn(x, h)
         out = self.fc(out[-1, :, :])
         return out
-
-    # def reset(self):
-    #     # self.h = Variable(torch.zeros(self.num_layers, 1, self.hidden_size))
