@@ -38,8 +38,6 @@ class DATASETS:
             y_train_mini.append(y_train[index])
         X_train_mini = np.array(X_train_mini, dtype="float32")
         X_train_mini = X_train_mini.T.reshape(self.seq_len, self.batch_size, self.input_size)
-        # X_train_mini = X_train_mini.T.reshape(self.batch_size, self.seq_len)
-        # X_train_mini = np.array(X_train_mini, dtype="float32").reshape(self.batch_size, self.input_size, self.seq_len)
         y_train_mini = np.array(y_train_mini, dtype="float32")
 
         return X_train_mini, y_train_mini
@@ -55,6 +53,7 @@ def mse(y_train, y_train_pred, y_test, y_test_pred):
     train_error = mean_squared_error(y_train, y_train_pred)
     test_error = mean_squared_error(y_test, y_test_pred)
     return train_error, test_error
+
 
 def show_progress(e, b, b_total, loss):
     sys.stdout.write("\r%3d: [%3d / %3d] loss: %f" % (e, b, b_total, loss))

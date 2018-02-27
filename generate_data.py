@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import numpy as np
 import pickle
@@ -22,10 +23,12 @@ def sin(X, N, freq=100):
     sin_ = sin_/max(sin_)
     return sin_
 
+
 def sample(sample_size):
     sin_ = sin(np.arange(sample_size), 3)
     noise = np.random.uniform(-0.2, 0.2, sample_size)
     return sin_ + noise
+
 
 def main():
     data = np.array([sample(opt.sample) for i in range(10)])
@@ -37,5 +40,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

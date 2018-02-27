@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os, sys
 sys.path.append(os.pardir)
 import numpy as np
@@ -77,7 +78,6 @@ def train(i_data, m, i, result_path):
     # ----------
     loss_history = []
     time_history = []
-    # print("Train")
     for e in range(opt.epoch):
         total_loss = 0
         start = time.time()
@@ -103,7 +103,6 @@ def train(i_data, m, i, result_path):
 
     # test
     # ----------
-    # print('\nTest')
     X_train, X_test = datasets.make_testdata(X_train, X_test)
     X_train = Variable(torch.from_numpy(X_train))
     X_test = Variable(torch.from_numpy(X_test))
@@ -121,7 +120,6 @@ def train(i_data, m, i, result_path):
 
 
 def main():
-    
     if opt.all:
         ms = ['rnn', 'lstm', 'cnn', 'qrnn']
     else:
@@ -158,7 +156,7 @@ def main():
             pickle.dump(train_error, f)
         with open(os.path.join(result_path, 'test_error.pkl'), 'wb') as f:
             pickle.dump(test_error, f)
-        
+
         plot_loss_history(m, save=True, save_path=result_path)
 
     try:
@@ -166,5 +164,6 @@ def main():
         time_boxplot(save=True, save_path=opt.result_path)
     except:
         pass
+
 if __name__ == '__main__':
     main()

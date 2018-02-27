@@ -1,0 +1,8 @@
+cupy==2.4.0
+matplotlib==2.1.2
+numpy==1.14.0
+pandas==0.22.0
+pynvrtc==8.0
+seaborn==0.8.1
+torch==0.3.0.post4
+torchvision==0.2.0
