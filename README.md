@@ -1,6 +1,16 @@
 # Time-series Analysis
 ## Environment
+Ubuntu 16.04.3 LTS (Xenial Xerus)
+
+Tesla K40
+
+cuda driver 375.74
+
+cuda 
+
 Python 3.6.2
+
+Pytorch 0.3.0
 
 I used a [qrnn library of Salesforce](https://github.com/salesforce/pytorch-qrnn) in my code (./models/torchqrnn/*).
 ```
