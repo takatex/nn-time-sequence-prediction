@@ -4,11 +4,12 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 
 class CNN(nn.Module):
-    def __init__(self, input_size, hidden_size, output_size):
+    def __init__(self, input_size, hidden_size, output_size, use_cuda):
         super(CNN, self).__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.output_size = output_size
+        self.use_cuda = use_cuda
 
         self.features = nn.Sequential(
             nn.Conv1d(input_size, hidden_size, 5, 3, bias=False),
@@ -25,10 +26,12 @@ class CNN(nn.Module):
                 )
 
     def forward(self, x):
-        # Turn (seq_len x batch_size x input_size) into (batch_size x input_size x seq_len) for CNN
+        if self.use_cuda:
+            x = x.cuda()
+        # Turn (seq_len x batch_size x input_size) into (batch_size x input_size x seq_len)
         x = x.transpose(0, 1).transpose(1, 2)
         out = self.features(x)
-        # Turn (batch_size x hidden_size x seq_len) back into (seq_len x batch_size x hidden_size) for RNN
+        # Turn (batch_size x hidden_size x seq_len) back into (seq_len x batch_size x hidden_size)
         out = out.transpose(1, 2).transpose(0, 1)
         out = self.fc(out)
         return out

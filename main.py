@@ -61,7 +61,7 @@ def models(m):
     elif m == 'qrnn':
         return QRNN(1, opt.hidden_size, opt.num_layers, 1, opt.cuda)
     elif m == 'cnn':
-        return CNN(1, opt.hidden_size, 1)
+        return CNN(1, opt.hidden_size, 1, opt.cuda)
 
 def train(i_data, m, i, result_path):
     datasets = DATASETS(opt.seq_len, opt.batch_size, 1)
@@ -85,13 +85,12 @@ def train(i_data, m, i, result_path):
             x, y = datasets.mini_traindata(X_train, y_train)
             x = Variable(torch.from_numpy(x))
             y = Variable(torch.from_numpy(y))
-            if opt.cuda:
-                x = x.cuda()
-                y = y.cuda()
             model.zero_grad()
-            # model.reset()
             out = model(x)
-            loss = criterion(out, y)
+            if opt.cuda:
+                loss = criterion(out, y.cuda())
+            else:
+                loss = criterion(out, y)
             loss.backward()
             total_loss += loss.data[0]
             optimizer.step()
@@ -106,13 +105,8 @@ def train(i_data, m, i, result_path):
     X_train, X_test = datasets.make_testdata(X_train, X_test)
     X_train = Variable(torch.from_numpy(X_train))
     X_test = Variable(torch.from_numpy(X_test))
-    if opt.cuda:
-        X_train = X_train.cuda()
-        X_test = X_test.cuda()
-
     y_train_pred = model(X_train).cpu().data.numpy().reshape(-1)
     y_test_pred = model(X_test).cpu().data.numpy().reshape(-1)
-
     train_error, test_error = mse(y_train, y_train_pred, y_test, y_test_pred)
     plot_test(i, y_test, y_test_pred, show=False, save=True, save_path=result_path)
 

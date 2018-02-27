@@ -18,6 +18,7 @@ class RNN(nn.Module):
     def forward(self, x):
         h = Variable(torch.zeros(self.num_layers, x.size(1), self.hidden_size))
         if self.use_cuda:
+            x = x.cuda()
             h = h.cuda()
         out, _ = self.rnn(x, h)
         out = self.fc(out[-1, :, :])
