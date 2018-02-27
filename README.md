@@ -1,4 +1,4 @@
-# NN Time-series Analysis
+# NN Time Sequence Prediction
 ## Environment
 - OS  
 Ubuntu 16.04.3 LTS (Xenial Xerus)　
