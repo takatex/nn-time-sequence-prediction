@@ -164,8 +164,8 @@ def main():
         error_boxplot(save=True, save_path=opt.result_path)
         time_boxplot(save=True, save_path=opt.result_path)
     except:
-        message = '\n\nCannot draw a error boxplot and time boxplot.\nPossibly, there are not enough result file (*.pkl).'
-        message += '\nIf you want to draw them, please run the following commands.\n\npython main.py --all True [other option]\n'
+        message = '\n\nCannot draw a error boxplot and time boxplot.\nPossibly, there are not enough result files (*.pkl).'
+        message += '\nIf you want to draw them, please run the following commands.\n\npython main.py --model all [other option]\n'
         print(message)
 
 if __name__ == '__main__':
