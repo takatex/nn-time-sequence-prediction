@@ -24,7 +24,7 @@ I used a [qrnn library of Salesforce](https://github.com/salesforce/pytorch-qrnn
 }
 ```
 
-## Usege
+## Usage
 ```
 python main.py [-h] [--model {all,rnn,lstm,qrnn,cnn}] [--epoch EPOCH]
                [--batch_size BATCH_SIZE] [--n_iter N_ITER] [--seq_len SEQ_LEN]
@@ -45,7 +45,7 @@ optional arguments:
 ```
 
 **example**   
-If you set `--model all`(default), all models(rnn, lstm, cnn, qrnn) are used.
+If you set `--model all`(default), all models (rnn, lstm, cnn, qrnn) are used.
 If you cannot use GPU, set `--cuda None`(default).
 ```
 python main.py --cuda 0 --model all
